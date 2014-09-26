@@ -1,5 +1,6 @@
 ﻿//tu mamá
 using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.IO;
 
@@ -12,13 +13,13 @@ class router
 	public Vector2 pos;
 	public Info info;
 
-	public router(Vector2 pos, Texture2D tex)
+	public router(Vector2 pos, Info info, Texture2D tex)
 	{
 		this.tex = tex;
+		this.info = info;
 		this.pos = pos;
 		w = (int)(0.09f*Screen.width);
 		h = (int)(0.12f*Screen.height);
-		info = new Info();
 	}
 	public void draw()
 	{ 
@@ -100,8 +101,13 @@ public class NewBehaviourScript : MonoBehaviour
 	string str = "hola";
 	router a = null, b = null;
 	bool estirando;
+	GUIStyle style;
+
 	void Start () 
 	{
+		style = new GUIStyle();
+		style.normal.textColor = Color.black;
+
 		router = (Texture2D)Resources.Load("router");
 		swit = (Texture2D)Resources.Load("swit");
 		cable = (Texture2D)Resources.Load("cables");
@@ -168,6 +174,12 @@ public class NewBehaviourScript : MonoBehaviour
 	int min, distAux;
 	Vector2 mousePos = new Vector2();
 
+	Info loadInfo(string path)
+	{
+		return new Info();
+	}
+
+	string lectura = "nada";
 	void OnGUI () 
 	{
 		checkMouse();
@@ -181,15 +193,43 @@ public class NewBehaviourScript : MonoBehaviour
 		if(boton(new Rect(0,Screen.height*0.048f*4, Screen.width*0.036f, Screen.height*0.048f ), cable, cableP)) {seleccion = cable; turnoA = true; estirando = false; tipoLinea = lineaWireless; medio = Medio.Wireless;}
 		if(boton(new Rect(0,Screen.height*0.048f*5, Screen.width*0.036f, Screen.height*0.048f ), stc, stcP)) {seleccion = stc; estirando= false;}
 		if(boton(new Rect(0,Screen.height*0.048f*6, Screen.width*0.036f, Screen.height*0.048f ), puntero, punteroP)) {seleccion = null; estirando=false;}
-		if(boton(new Rect(0,Screen.height*0.048f*7, Screen.width*0.036f, Screen.height*0.048f ), borrar, borrarP)) seleccion = erasor;
-		
+		if(boton(new Rect(0,Screen.height*0.048f*7, Screen.width*0.036f, Screen.height*0.048f ), borrar, borrarP)) 
+		{
+			using(StreamReader sr = new StreamReader(EditorUtility.OpenFilePanel("Load Configuration", "", "mike")))
+			{
+				int edoLectura = -1;
+				while((lectura = sr.ReadLine()) != null)
+				{
+					if(lectura == "\\Router") edoLectura = 0; else
+					if(lectura == "\\Switch") edoLectura = 1; else
+					if(lectura == "\\Stc") edoLectura = 2; else
+					if(lectura == "\\Cable") edoLectura = 3; else
+					{
+						if(edoLectura == 0) routers.Add(new router(
+							new Vector2(
+								int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
+								int.Parse(lectura.Substring(lectura.IndexOf(" ")+1))),
+							loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
+							routerI
+						  	)); else
+						if(edoLectura == 1) ; else
+						if(edoLectura == 2) ; else
+						if(edoLectura == 3) ;
+					}
+				}
+			}
+		}
+		if(boton(new Rect(0,Screen.height*0.048f*8, Screen.width*0.036f, Screen.height*0.048f ), borrar, borrarP)) seleccion = erasor;
+
+		GUI.Label(new Rect(0, Screen.height*0.6f, 300, 300), lectura, style);
+
 		//opción actual
 		if(seleccion != null) GUI.DrawTexture(new Rect(invierte(Input.mousePosition).x, invierte(Input.mousePosition).y, Screen.width*0.12f, Screen.width*0.1f), seleccion);
 		if(mouseButtonUp && !new Rect(0,0,Screen.width*0.036f, Screen.height*8*0.048f).Contains(invierte(Input.mousePosition)))
 		{ 
-			if(seleccion == router) {routers.Add(new router(invierte(Input.mousePosition), routerI));}
-			if(seleccion == swit) {switches.Add(new router(invierte(Input.mousePosition), switchI));}
-			if(seleccion == stc) {stcs.Add(new router(invierte(Input.mousePosition), stcI));}
+			if(seleccion == router) {routers.Add(new router(invierte(Input.mousePosition), new Info(), routerI));}
+			if(seleccion == swit) {switches.Add(new router(invierte(Input.mousePosition), new Info(), switchI));}
+			if(seleccion == stc) {stcs.Add(new router(invierte(Input.mousePosition), new Info(), stcI));}
 
 			if(seleccion == cable)
 			{
