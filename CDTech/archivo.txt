@@ -1,0 +1,17 @@
+//ROUTERS
+A
+F
+
+//SWITCHES
+B
+V
+
+//STCS
+D
+G
+G
+
+//CABLES
+Ethernet 'A' - 'D'
+Wireless 'A' - 'V'
+
