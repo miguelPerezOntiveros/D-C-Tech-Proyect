@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections;
 
 namespace Parser
 {
@@ -11,9 +12,11 @@ namespace Parser
 
 		public static void Main (string[] args)
 		{
-
-			if (loadData(@"archivo.txt") != null)
+			Info info = loadData (@"archivo.txt");
+			if (info!= null) {
 				Console.WriteLine ("Archivo correcto");
+				Console.WriteLine (info.info ());
+			}
 			else
 				Console.WriteLine ("Archivo incorrecto");
 			
@@ -122,6 +125,14 @@ namespace Parser
 			public void addInterf(Interf toAdd){ interfaces.Add(toAdd);}
 			public void deleteInterf(int i){ interfaces.RemoveAt(i);}
 			public void editInterf(int i, Medio medio, string ipAddress, int clockRate){ interfaces[i] = new Interf(medio, ipAddress, clockRate);}
+			public string info(){
+				string res = hostname + "\n";
+				for (int i = 0; i < interfaces.Count; i++) {
+					Interf interfaz = (Interf)interfaces [i];
+					res += interfaz.info ();
+				}
+				return res;
+			}
 		}
 
 		class Interf
@@ -139,6 +150,10 @@ namespace Parser
 				this.medio = medio;
 				this.ipAddress = ipAddress;
 				this.clockRate = clockRate;
+			}
+			public string info(){
+				return medio + " " + ipAddress + 
+					(medio == Medio.Serial)? medio +" " : " ";
 			}
 		}
 	}
