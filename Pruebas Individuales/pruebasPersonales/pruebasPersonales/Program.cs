@@ -1,0 +1,180 @@
+﻿using System;
+using System.IO;
+using System.Collections;
+
+namespace pruebasPersonales
+{
+	class MainClass
+	{
+		enum Medio {Ethernet, Fibra, Wireless, Serial};
+
+
+
+		public static void Main (string[] args)
+		{
+			Info info = loadData (@"archivo.txt");
+			if (info!= null) {
+				Console.WriteLine ("Archivo correcto");
+				Console.WriteLine (info.info ());
+			}
+			else
+				Console.WriteLine ("Archivo incorrecto");
+
+			Console.ReadKey();
+
+		}
+
+		enum stateRouter {glob,conf,rou,inte};
+		static Info loadData(string source){
+			Info data = new Info ();
+			string text = System.IO.File.ReadAllText(@"archivo.txt");
+			string[] code = text.Split ('\n');
+			string[] utileria = {""};
+			int index = -1;
+			stateRouter estado = stateRouter.glob;
+			Interf interfaz = new Interf ();
+			while (++index < code.Length) {
+				text = code [index];
+				if (text[0] == '#')
+					continue;
+				utileria = text.Split (' ');
+				switch (estado) {
+
+				case stateRouter.glob:
+					if (utileria.Length < 2)
+						return null;
+					if (utileria [0] [0] == 'c' && utileria [1] [0] == 't')
+						estado = stateRouter.conf;
+					break;
+				case stateRouter.conf:
+					if (utileria [0] == "exit") {
+						estado = stateRouter.glob;
+						break;
+					}
+					if (utileria.Length < 2)
+						return null;
+					if (text[0] == 'i') {
+						switch (utileria [1] [0]) {
+						case 'g':
+							interfaz.medio = Medio.Ethernet;
+							break;
+						case 's': 
+							interfaz.medio = Medio.Serial;
+							break;
+						default:
+							interfaz.medio = Medio.Fibra;
+							break;
+						}
+						estado = stateRouter.inte;
+					} else if (utileria [0] == "router")
+						estado = stateRouter.rou;
+					else
+						return null;
+					break;
+
+
+				case stateRouter.inte:
+					switch (utileria [0]){
+					case "exit":
+						data.addInterf (new Interf (interfaz.medio, interfaz.ipAddress, interfaz.clockRate));
+						estado = stateRouter.conf;
+						break;
+					case "ip":
+						//Aqui va el código para poner la ip...
+						if (utileria.Length != 4)
+							return null;
+						interfaz.ipAddress = utileria [2] + " " + utileria [3];
+						break;
+					case "clockrate":
+						try {
+							interfaz.clockRate = Convert.ToInt32(utileria[1]);
+						} catch {
+							return null;
+						}
+						break;
+					default: 
+						if (utileria.Length > 2)
+							return null;
+						break;
+					}
+					break;
+
+				case stateRouter.rou:
+					switch (utileria [0]) {
+					case "exit":
+						estado = stateRouter.conf;
+						break;
+					case "end":
+						estado = stateRouter.glob;
+						break;
+					default:
+						break;
+					}
+					break;
+				default: break;
+				}
+			}
+			return data;
+		}
+		class Info
+		{
+			public string hostname = "";
+			public ArrayList interfaces;
+
+			public Info()
+			{
+				interfaces  = new ArrayList();
+			}
+
+			public void addInterf(Interf toAdd){ interfaces.Add(toAdd);}
+			public void deleteInterf(int i){ interfaces.RemoveAt(i);}
+			public void editInterf(int i, Medio medio, string ipAddress, int clockRate){ interfaces[i] = new Interf(medio, ipAddress, clockRate);}
+			public string info(){
+				string res = hostname + "\n";
+				for (int i = 0; i < interfaces.Count; i++) {
+					Interf interfaz = (Interf)interfaces [i];
+					res += interfaz.info ();
+				}
+				return res;
+			}
+		}
+
+		class Interf
+		{
+			public Medio medio;
+			public string ipAddress;
+			public int clockRate;
+			public Interf(){
+				medio = Medio.Ethernet;
+				ipAddress = "";
+				clockRate = 0;
+			}
+			public Interf(Medio medio, string ipAddress, int clockRate)
+			{
+				this.medio = medio;
+				this.ipAddress = ipAddress;
+				this.clockRate = clockRate;
+			}
+			string medium(){
+				switch (medio) {
+				case Medio.Ethernet:
+					return "GE";
+					break;
+				case Medio.Serial:
+					return "SE";
+					break;
+				default:
+					return "GE";
+					break;
+				}
+			}
+			public string info(){
+				string res = medium () + " " + ipAddress;
+				if (medio == Medio.Serial)
+					res += " " + clockRate;
+				return res;
+			}
+		}
+	}
+}
+
