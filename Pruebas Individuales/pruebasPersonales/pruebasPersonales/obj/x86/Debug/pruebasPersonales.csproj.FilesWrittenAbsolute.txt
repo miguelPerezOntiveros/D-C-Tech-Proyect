@@ -1,0 +1,5 @@
+/Users/ariel/Dropbox/ITESM/20144agostoDiciembre/DC Tech Proyect/D-C-Tech-Proyect/Pruebas Individuales/pruebasPersonales/pruebasPersonales/obj/x86/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/Users/ariel/Dropbox/ITESM/20144agostoDiciembre/DC Tech Proyect/D-C-Tech-Proyect/Pruebas Individuales/pruebasPersonales/pruebasPersonales/bin/Debug/pruebasPersonales.exe.mdb
+/Users/ariel/Dropbox/ITESM/20144agostoDiciembre/DC Tech Proyect/D-C-Tech-Proyect/Pruebas Individuales/pruebasPersonales/pruebasPersonales/bin/Debug/pruebasPersonales.exe
+/Users/ariel/Dropbox/ITESM/20144agostoDiciembre/DC Tech Proyect/D-C-Tech-Proyect/Pruebas Individuales/pruebasPersonales/pruebasPersonales/obj/x86/Debug/pruebasPersonales.exe
+/Users/ariel/Dropbox/ITESM/20144agostoDiciembre/DC Tech Proyect/D-C-Tech-Proyect/Pruebas Individuales/pruebasPersonales/pruebasPersonales/obj/x86/Debug/pruebasPersonales.exe.mdb
