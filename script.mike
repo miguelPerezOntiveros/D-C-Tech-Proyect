@@ -1,4 +1,9 @@
 \Router
+200 100  path
+400 200  path
+600 300  path
+200 400  path
 \Switch
+300 300  path
 \Stc
 \Cable

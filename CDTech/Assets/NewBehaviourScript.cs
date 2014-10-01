@@ -205,14 +205,24 @@ public class NewBehaviourScript : MonoBehaviour
 					if(lectura == "\\Stc") edoLectura = 2; else
 					if(lectura == "\\Cable") edoLectura = 3; else
 					{
-						if(edoLectura == 0) routers.Add(new router(
-							new Vector2(
-								int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
-								int.Parse(lectura.Substring(lectura.IndexOf(" ")+1))),
-							loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
-							routerI
-						  	)); else
-						if(edoLectura == 1) ; else
+						if(edoLectura == 0) 
+							routers.Add(new router(
+								new Vector2(
+									int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
+									int.Parse(lectura.Substring(lectura.IndexOf(" ")+1, lectura.IndexOf("  ")-lectura.IndexOf(" ")))),
+								loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
+								routerI
+							  	)
+							); else
+						if(edoLectura == 1) 
+							switches.Add(new router(
+								new Vector2(
+									int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
+									int.Parse(lectura.Substring(lectura.IndexOf(" ")+1, lectura.IndexOf("  ")-lectura.IndexOf(" ")))),
+								loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
+								switchI
+								)
+							); else
 						if(edoLectura == 2) ; else
 						if(edoLectura == 3) ;
 					}
