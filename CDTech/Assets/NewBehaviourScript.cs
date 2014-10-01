@@ -103,6 +103,12 @@ public class NewBehaviourScript : MonoBehaviour
 	bool estirando;
 	GUIStyle style;
 
+	Rect cableWindowRect, dispWindowRect;
+	bool windowCableAct, windowDispAct;
+	public GUIStyle cableWdw, dispWdw, btnCStyle;
+	Texture2D btnClose, btnCloseP;
+
+
 	void Start () 
 	{
 		style = new GUIStyle();
@@ -125,6 +131,9 @@ public class NewBehaviourScript : MonoBehaviour
 		stcI = (Texture2D)Resources.Load("stcI");
 		erasor = (Texture2D)Resources.Load("erasor");
 
+		btnClose = (Texture2D)Resources.Load("btnClose");
+		btnCloseP = (Texture2D)Resources.Load("btnClose_h");
+
 		lineaPunteada = (Texture2D)Resources.Load("lineaPunteada");
 		lineaContinua = (Texture2D)Resources.Load("lineaContinua");
 		lineaWireless = (Texture2D)Resources.Load("lineaWireless");
@@ -133,6 +142,9 @@ public class NewBehaviourScript : MonoBehaviour
 		switches = new ArrayList();
 		cables = new ArrayList();
 		stcs = new ArrayList();
+
+		windowCableAct = false;
+		windowDispAct = false;
 	}
 
 	Vector2 invierte(Vector2 v){ return new Vector2(v.x, Screen.height-v.y);}
@@ -179,21 +191,74 @@ public class NewBehaviourScript : MonoBehaviour
 		return new Info();
 	}
 
+	float [] scaleImg (Texture2D img, float width, float height)
+	{
+		float [] size = new float[2];
+
+
+		float scale =(float)((float)(img.width) / (float)(img.height));
+
+		if (width > height) {
+
+			size [0] = width;
+			size [1] = width * scale;
+		} else {
+			size [1] = height;
+			size [0] = height * scale;
+		}
+		return size;
+	}
+
 	string lectura = "nada";
+
+	void windowCable(int windowID)
+	{
+
+		float [] bC = scaleImg (btnClose, cableWindowRect.width * .11f, 0);
+		if (GUI.Button (new Rect (cableWindowRect.width-bC[0], 0, bC[0], bC[1]),"" , btnCStyle)){
+			windowCableAct=false;
+		}
+
+	}
 	void OnGUI () 
 	{
 		checkMouse();
 		GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height), fondo);
 	
 		//Hacer o cambiar selección
-		if(boton(new Rect(0,Screen.height*0.048f*0, Screen.width*0.036f, Screen.height*0.048f ), router, routerP)) {seleccion = router; estirando= false;}
-		if(boton(new Rect(0,Screen.height*0.048f*1, Screen.width*0.036f, Screen.height*0.048f ), swit, switP)) {seleccion = swit; estirando= false;}
-		if(boton(new Rect(0,Screen.height*0.048f*2, Screen.width*0.036f, Screen.height*0.048f ), cable, cableP)) {seleccion = cable; turnoA = true; estirando = false; tipoLinea = lineaPunteada; medio = Medio.Ethernet;}
-		if(boton(new Rect(0,Screen.height*0.048f*3, Screen.width*0.036f, Screen.height*0.048f ), cable, cableP)) {seleccion = cable; turnoA = true; estirando = false; tipoLinea = lineaContinua; medio = Medio.Fibra;}
-		if(boton(new Rect(0,Screen.height*0.048f*4, Screen.width*0.036f, Screen.height*0.048f ), cable, cableP)) {seleccion = cable; turnoA = true; estirando = false; tipoLinea = lineaWireless; medio = Medio.Wireless;}
-		if(boton(new Rect(0,Screen.height*0.048f*5, Screen.width*0.036f, Screen.height*0.048f ), stc, stcP)) {seleccion = stc; estirando= false;}
-		if(boton(new Rect(0,Screen.height*0.048f*6, Screen.width*0.036f, Screen.height*0.048f ), puntero, punteroP)) {seleccion = null; estirando=false;}
-		if(boton(new Rect(0,Screen.height*0.048f*7, Screen.width*0.036f, Screen.height*0.048f ), borrar, borrarP)) 
+		float[] tamBtn = scaleImg (router, 0, Screen.height * 0.055f);
+
+		if(boton(new Rect(0,tamBtn[1]*0, tamBtn[0], tamBtn[1] ), router, routerP)) 
+		{seleccion = router; estirando= false;}
+		if(boton(new Rect(0,tamBtn[1]*1, tamBtn[0], tamBtn[1] ), swit, switP)) 
+		{seleccion = swit; estirando= false;}
+		if(boton(new Rect(0,tamBtn[1]*2, tamBtn[0], tamBtn[1]), cable, cableP)) 
+		{
+			windowCableAct = true;
+			/*
+			seleccion = cable; 
+			turnoA = true; 
+			estirando = false; 
+			tipoLinea = lineaPunteada; 
+			medio = Medio.Ethernet;*/
+		}
+		if (windowCableAct) 
+		{
+			cableWindowRect = new Rect(tamBtn[0], tamBtn[1]*2, Screen.width*0.2f, Screen.height*0.143f );
+			cableWindowRect = GUI.Window(0, cableWindowRect, windowCable, "Seleccionar cable", cableWdw);
+		}
+		if(boton(new Rect(0,tamBtn[1]*3, tamBtn[0], tamBtn[1]), cable, cableP)) 
+		{seleccion = cable; turnoA = true; estirando = false; tipoLinea = lineaContinua; medio = Medio.Fibra;}
+		if(boton(new Rect(0,tamBtn[1]*4, tamBtn[0], tamBtn[1] ), cable, cableP)) 
+		{seleccion = cable; turnoA = true; estirando = false; tipoLinea = lineaWireless; medio = Medio.Wireless;}
+		if(boton(new Rect(0,tamBtn[1]*5, tamBtn[0], tamBtn[1]), stc, stcP)) 
+		{seleccion = stc; estirando= false;}
+		if(boton(new Rect(0,tamBtn[1]*6, tamBtn[0], tamBtn[1] ), puntero, punteroP)) 
+		{seleccion = null; estirando=false;}
+		float[] borrarTam = scaleImg (borrar, tamBtn[0], 0);
+
+
+		if(boton(new Rect(0,tamBtn[1]*7, borrarTam[0], borrarTam[1] ), borrar, borrarP)) 
 		{
 			using(StreamReader sr = new StreamReader(EditorUtility.OpenFilePanel("Load Configuration", "", "mike")))
 			{
@@ -219,9 +284,9 @@ public class NewBehaviourScript : MonoBehaviour
 				}
 			}
 		}
-		if(boton(new Rect(0,Screen.height*0.048f*8, Screen.width*0.036f, Screen.height*0.048f ), borrar, borrarP)) seleccion = erasor;
+		if(boton(new Rect(0,tamBtn[1]*8, tamBtn[0], tamBtn[1]), borrar, borrarP)) seleccion = erasor;
 
-		GUI.Label(new Rect(0, Screen.height*0.6f, 300, 300), lectura, style);
+		GUI.Label(new Rect(0, tamBtn[1]*9, 300, 300), lectura, style);
 
 		//opción actual
 		if(seleccion != null) GUI.DrawTexture(new Rect(invierte(Input.mousePosition).x, invierte(Input.mousePosition).y, Screen.width*0.12f, Screen.width*0.1f), seleccion);
