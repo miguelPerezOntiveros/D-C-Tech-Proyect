@@ -1,17 +1,13 @@
 //ROUTERS
-A
-F
+a
+b
+c
+d
 
 //SWITCHES
-B
-V
+A
 
 //STCS
-D
-G
-G
 
 //CABLES
-Ethernet 'A' - 'D'
-Wireless 'A' - 'V'
 

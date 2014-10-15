@@ -397,6 +397,7 @@ public class NewBehaviourScript : MonoBehaviour
 					int edoLectura = -1;
 					while((lectura = sr.ReadLine()) != null)
 					{
+<<<<<<< HEAD
 						if(lectura == "\\Router") edoLectura = 0; else
 							if(lectura == "\\Switch") edoLectura = 1; else
 							if(lectura == "\\Stc") edoLectura = 2; else
@@ -462,6 +463,28 @@ public class NewBehaviourScript : MonoBehaviour
 					{
 						showInterfaces=false;
 						btnPMInterfaces = btnPlusH;
+=======
+						if(edoLectura == 0) 
+							routers.Add(new router(
+								new Vector2(
+									int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
+									int.Parse(lectura.Substring(lectura.IndexOf(" ")+1, lectura.IndexOf("  ")-lectura.IndexOf(" ")))),
+								loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
+								routerI
+							  	)
+							); else
+						if(edoLectura == 1) 
+							switches.Add(new router(
+								new Vector2(
+									int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
+									int.Parse(lectura.Substring(lectura.IndexOf(" ")+1, lectura.IndexOf("  ")-lectura.IndexOf(" ")))),
+								loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
+								switchI
+								)
+							); else
+						if(edoLectura == 2) ; else
+						if(edoLectura == 3) ;
+>>>>>>> origin/master
 					}
 				}
 			}
