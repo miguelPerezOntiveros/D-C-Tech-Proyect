@@ -52,6 +52,7 @@ class Interf
 	public Medio medio;
 	public string ipAddress;
 	public int clockRate;
+	public Interf(){}
 	public Interf(Medio medio, string ipAddress, int clockRate)
 	{
 		this.medio = medio;
@@ -242,11 +243,119 @@ public class NewBehaviourScript : MonoBehaviour
 	bool turnoA = true;
 	int min, distAux;
 	Vector2 mousePos = new Vector2();
-
-	Info loadInfo(string path)
+	enum stateRouter {glob,conf,rou,inte};
+		
+	static Info loadInfo(string source)
 	{
 		return new Info();
-	}
+		/*
+		Debug.Log(source);
+			Info data = new Info ();
+			string[] code;
+			string text;
+			using(StreamReader sr = new StreamReader(source))
+			{	
+				code = (sr.ReadToEnd()).Split('\n');
+				text = sr.ReadToEnd();
+			}
+
+			//for (int i = 0; i < code.Length; i++)
+			//	Console.WriteLine ("Linea " + i + " " + code [i]);
+
+			string[] utileria = {""};
+			int index = -1;
+			stateRouter estado = stateRouter.glob;
+			Interf interfaz = new Interf();
+			while (++index < code.Length) {
+				text = code [index];
+				Debug.Log("text " + text);
+				utileria = text.Split (' ');
+				if (text[0] != '#')
+				switch (estado) {
+					case stateRouter.glob:
+					if (utileria [0] [0] == 'c' && utileria [1] [0] == 't')
+						estado = stateRouter.conf;
+					break;
+					case stateRouter.conf:
+						if (utileria [0] == "exit") {
+							estado = stateRouter.glob;
+							break;
+						}
+						if (text [0] == 'i') {
+
+						estado = stateRouter.inte;
+							if (utileria.Length < 2) {
+							//Console.WriteLine ("La interfaz, su nombre");
+								return null;
+							}
+							switch (utileria [1] [0]) {
+							case 'g':
+								interfaz.medio = Medio.Ethernet;
+								break;
+							case 's': 
+								interfaz.medio = Medio.Wireless;
+								break;
+							default:
+								interfaz.medio = Medio.Fibra;
+								break;
+							}
+							break;
+						} 
+					if (text [0] == 'r') {
+							estado = stateRouter.rou;
+							break;
+						}
+					else
+						return null;
+					break;
+
+
+				case stateRouter.inte:
+					switch (utileria [0]){
+					case "exit":
+						data.addInterf (new Interf (interfaz.medio, interfaz.ipAddress, interfaz.clockRate));
+						estado = stateRouter.conf;
+						break;
+						case "ip":
+							if (utileria.Length < 4) {
+							/////////
+							//Console.WriteLine ("La ip");
+								return null;
+							}
+						interfaz.ipAddress = utileria [2] + " " + utileria [3];
+						break;
+					case "clockrate":
+						try {
+							interfaz.clockRate = int.Parse(utileria[1]);
+						} catch {
+							///////////
+							//Console.WriteLine ("ClockRATE");
+							return null;
+						}
+						break;
+					default: 
+						break;
+					}
+					break;
+
+				case stateRouter.rou:
+					switch (utileria [0]) {
+					case "exit":
+						estado = stateRouter.conf;
+						break;
+					case "end":
+						estado = stateRouter.glob;
+						break;
+					default:
+						break;
+					}
+					break;
+				default: break;
+				}
+			}
+			return data;
+			*/
+		}
 
 	float [] scaleImg (Texture2D img, float width, float height)
 	{
@@ -393,30 +502,38 @@ public class NewBehaviourScript : MonoBehaviour
 			if (GUI.Button(new Rect (Screen.width - btnLoadSize[0] - btnExportSize[0], menuDerHeader[1]*1.8f, btnLoadSize[0], btnLoadSize[1] ), "", btnLoadStyle))
 			{
 				using(StreamReader sr = new StreamReader(EditorUtility.OpenFilePanel("Load Configuration", "", "mike")))
-				{
+				{	
 					int edoLectura = -1;
 					while((lectura = sr.ReadLine()) != null)
 					{
-
 						if(lectura == "\\Router") edoLectura = 0; else
-							if(lectura == "\\Switch") edoLectura = 1; else
-							if(lectura == "\\Stc") edoLectura = 2; else
-							if(lectura == "\\Cable") edoLectura = 3; else
+						if(lectura == "\\Switch") edoLectura = 1; else
+						if(lectura == "\\Stc") edoLectura = 2; else
+						if(lectura == "\\Cable") edoLectura = 3; else
 						{
-							if(edoLectura == 0) routers.Add(new router(
+							if(edoLectura == 0) 
+							routers.Add(new router(
 								new Vector2(
-								int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
-								int.Parse(lectura.Substring(lectura.IndexOf(" ")+1))),
+									int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
+									int.Parse(lectura.Substring(lectura.IndexOf(" ")+1, lectura.IndexOf("  ")-lectura.IndexOf(" ")))),
 								loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
 								routerI
-								)); else
-								if(edoLectura == 1) ; else
-								if(edoLectura == 2) ; else
-								if(edoLectura == 3) ;
-
-
+							  	)
+							); else
+							if(edoLectura == 1) 
+							switches.Add(new router(
+								new Vector2(
+									int.Parse(lectura.Substring(0, lectura.IndexOf(" "))), 
+									int.Parse(lectura.Substring(lectura.IndexOf(" ")+1, lectura.IndexOf("  ")-lectura.IndexOf(" ")))),
+								loadInfo(lectura.Substring(lectura.IndexOf("  ")+2)),
+								switchI
+								)
+							); else
+							if(edoLectura == 2) ; else
+							if(edoLectura == 3) ;
 						}
 					}
+					
 				}
 			}
 

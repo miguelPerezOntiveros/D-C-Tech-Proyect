@@ -1,0 +1,12 @@
+#comentario
+#Otro comentario
+c t
+exit
+c t
+exit
+int ge 0/0
+ip address 192.168.3.10 255.255.255.0
+exit
+int se 0/0
+ip address 10.10.10.3 255.255.255.252
+exit
