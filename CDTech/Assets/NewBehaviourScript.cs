@@ -36,17 +36,21 @@ class Info
 {
 	public string hostname = "";
 	public ArrayList interfaces;
-
+	
 	public Info()
 	{
 		interfaces  = new ArrayList();
 	}
-
+	public void print(){
+		Debug.Log (hostname + " host " + interfaces.Count+ "Interfaces" );
+		foreach (Interf inter in interfaces) {
+			inter.cadena();
+		}
+	}
 	public void addInterf(Interf toAdd){ interfaces.Add(toAdd);}
 	public void deleteInterf(int i){ interfaces.RemoveAt(i);}
 	public void editInterf(int i, Medio medio, string ipAddress, int clockRate){ interfaces[i] = new Interf(medio, ipAddress, clockRate);}
 }
-
 class Interf
 {
 	public Medio medio;
@@ -58,6 +62,9 @@ class Interf
 		this.medio = medio;
 		this.ipAddress = ipAddress;
 		this.clockRate = clockRate;
+	}
+	public void cadena(){
+		Debug.Log ("IP de la interfaz: "+ ipAddress);
 	}
 }
 
@@ -247,115 +254,117 @@ public class NewBehaviourScript : MonoBehaviour
 		
 	static Info loadInfo(string source)
 	{
-		return new Info();
-		/*
-		Debug.Log(source);
-			Info data = new Info ();
-			string[] code;
-			string text;
-			using(StreamReader sr = new StreamReader(source))
-			{	
-				code = (sr.ReadToEnd()).Split('\n');
-				text = sr.ReadToEnd();
-			}
-
-			//for (int i = 0; i < code.Length; i++)
-			//	Console.WriteLine ("Linea " + i + " " + code [i]);
-
-			string[] utileria = {""};
-			int index = -1;
-			stateRouter estado = stateRouter.glob;
-			Interf interfaz = new Interf();
-			while (++index < code.Length) {
-				text = code [index];
-				Debug.Log("text " + text);
-				utileria = text.Split (' ');
-				if (text[0] != '#')
-				switch (estado) {
-					case stateRouter.glob:
+		//return new Info();
+		
+		Info data = new Info ();
+		string[] code;
+		string text;
+		using(StreamReader sr = new StreamReader(source))
+		{	
+			code = (sr.ReadToEnd()).Split('\n');
+			Debug.Log(string.Join("Linea ", code));
+			text = sr.ReadToEnd();
+		}
+		
+		string[] utileria = {""};
+		int index = -1;
+		stateRouter estado = stateRouter.glob;
+		Interf interfaz = new Interf();
+		while (++index < code.Length) {
+			text = code [index];
+			utileria = text.Split (' ');
+			if (text == "")
+				continue;
+			if (text[0] != '#')
+			switch (estado) {
+				case stateRouter.glob:
+				if (utileria.Length > 1)
 					if (utileria [0] [0] == 'c' && utileria [1] [0] == 't')
 						estado = stateRouter.conf;
+				break;
+				case stateRouter.conf:
+				if (utileria [0] == "exit") {
+					estado = stateRouter.glob;
 					break;
-					case stateRouter.conf:
-						if (utileria [0] == "exit") {
-							estado = stateRouter.glob;
-							break;
-						}
-						if (text [0] == 'i') {
-
-						estado = stateRouter.inte;
-							if (utileria.Length < 2) {
-							//Console.WriteLine ("La interfaz, su nombre");
-								return null;
-							}
-							switch (utileria [1] [0]) {
-							case 'g':
-								interfaz.medio = Medio.Ethernet;
-								break;
-							case 's': 
-								interfaz.medio = Medio.Wireless;
-								break;
-							default:
-								interfaz.medio = Medio.Fibra;
-								break;
-							}
-							break;
-						} 
-					if (text [0] == 'r') {
-							estado = stateRouter.rou;
-							break;
-						}
-					else
+				}
+				if (text [0] == 'i') {
+					
+					estado = stateRouter.inte;
+					if (utileria.Length < 2) {
+						//Console.WriteLine ("La interfaz, su nombre");
 						return null;
-					break;
-
-
-				case stateRouter.inte:
-					switch (utileria [0]){
-					case "exit":
-						data.addInterf (new Interf (interfaz.medio, interfaz.ipAddress, interfaz.clockRate));
-						estado = stateRouter.conf;
-						break;
-						case "ip":
-							if (utileria.Length < 4) {
-							/////////
-							//Console.WriteLine ("La ip");
-								return null;
-							}
-						interfaz.ipAddress = utileria [2] + " " + utileria [3];
-						break;
-					case "clockrate":
-						try {
-							interfaz.clockRate = int.Parse(utileria[1]);
-						} catch {
-							///////////
-							//Console.WriteLine ("ClockRATE");
-							return null;
-						}
-						break;
-					default: 
-						break;
 					}
-					break;
-
-				case stateRouter.rou:
-					switch (utileria [0]) {
-					case "exit":
-						estado = stateRouter.conf;
+					switch (utileria [1] [0]) {
+					case 'g':
+						interfaz.medio = Medio.Ethernet;
 						break;
-					case "end":
-						estado = stateRouter.glob;
+					case 's': 
+						interfaz.medio = Medio.Wireless;
 						break;
 					default:
+						interfaz.medio = Medio.Fibra;
 						break;
 					}
 					break;
-				default: break;
+				} 
+				if (text [0] == 'r') {
+					estado = stateRouter.rou;
+					break;
 				}
+				else
+					return null;
+				break;
+				
+				
+				case stateRouter.inte:
+				switch (utileria [0]){
+				case "exit":
+					data.addInterf (new Interf (interfaz.medio, interfaz.ipAddress, interfaz.clockRate));
+					estado = stateRouter.conf;
+					break;
+				case "ip":
+					if (utileria.Length < 4) {
+						/////////
+						//Console.WriteLine ("La ip");
+						return null;
+					}
+					interfaz.ipAddress = utileria [2] + " " + utileria [3];
+					break;
+				case "clockrate":
+					try {
+						interfaz.clockRate = int.Parse(utileria[1]);
+					} catch {
+						///////////
+						//Console.WriteLine ("ClockRATE");
+						return null;
+					}
+					break;
+				default: 
+					break;
+				}
+				break;
+				
+				case stateRouter.rou:
+				switch (utileria [0]) {
+				case "exit":
+					estado = stateRouter.conf;
+					break;
+				case "end":
+					estado = stateRouter.glob;
+					break;
+				default:
+					break;
+				}
+				break;
+				default: break;
 			}
-			return data;
-			*/
 		}
+		Debug.Log ("Terminado");
+		data.print ();
+		return data;
+		
+	}
+
 
 	float [] scaleImg (Texture2D img, float width, float height)
 	{
