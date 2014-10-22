@@ -396,7 +396,7 @@ public class NewBehaviourScript : MonoBehaviour
 		}
 
 		float [] bCab = scaleImg (btnVentanaCable, cableWindowRect.width, cableWindowRect.height*.25f); 
-		Debug.Log("w> " + bCab[0] + " h> " + bCab[1] + " wt > " + cableWindowRect.width);
+
 		if (GUI.Button (new Rect (0, bCab[1], bCab[0], bCab[1]),"" , btnWCabS))
 		{
 			seleccion = cable; 
@@ -564,7 +564,6 @@ public class NewBehaviourScript : MonoBehaviour
 
 			float[] otherHeaderSize = scaleImg (otherMenuHeader, menuDerHeader[0], 0);
 
-			inicioMenuInterfacesSinD = inicioMenuRutas+ otherHeaderSize[1];
 
 			GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], inicioMenuRutas, otherHeaderSize[0], otherHeaderSize[1]),otherMenuHeader);
 
@@ -675,10 +674,13 @@ public class NewBehaviourScript : MonoBehaviour
 				GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, (menuDerHeader [1] * 2.75f + otherHeaderSize[1]+subHeaderSize[1] 
 				                                                              + yAddRutasE), menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Dinamicas" , menuSubTitle);
 				
+				inicioMenuInterfacesSinD = (menuDerHeader [1] * 2.75f + otherHeaderSize[1]+subHeaderSize[1] + yAddRutasE + menuDerHeader [1]*0.25f);
 
 				if (GUI.Button(new Rect(Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0],(menuDerHeader [1] * 2.75f + otherHeaderSize[1]+
 				                                                                                subHeaderSize[1] + yAddRutasE),plusSubSize[0], plusSubSize[1]),"", btnPMRutasD))
 				{
+					
+
 					if (showRutasD)
 					{
 						btnPMRutasD = btnPlusS;
@@ -689,6 +691,8 @@ public class NewBehaviourScript : MonoBehaviour
 						btnPMRutasD = btnMinS ;
 						showRutasD = true;
 					}
+
+
 				}
 
 				if (showRutasD)
@@ -735,11 +739,19 @@ public class NewBehaviourScript : MonoBehaviour
 					{
 						
 					}
+					
+					inicioMenuInterfaces = inicioMenuInterfacesConD;
+
 				}
-				inicioMenuInterfaces = inicioMenuInterfacesConD;
+				else
+				{
+					inicioMenuInterfaces = inicioMenuInterfacesSinD;
+					
+				}
 			}
 			else
-				inicioMenuInterfaces = inicioMenuInterfacesSinD;
+				inicioMenuInterfaces = inicioMenuRutas+ otherHeaderSize[1];
+
 			//
 			//termina seccion rutas
 			//
