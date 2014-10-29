@@ -1,5 +1,6 @@
 \Router
 200 100  archivo.txt
+200 200  archivo.txt
 \Switch
 \Stc
 \Cable

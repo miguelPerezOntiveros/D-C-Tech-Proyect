@@ -47,6 +47,15 @@ class Info
 			inter.cadena();
 		}
 	}
+	public string config(){
+		string salida = "hostname " + hostname;
+		for (int i = 0; i< interfaces.count; i++){
+			Interf a = (Interf)interfaces[i];
+			salida += a.config();
+		}
+		return salida;
+		
+	}
 	public void addInterf(Interf toAdd){ interfaces.Add(toAdd);}
 	public void deleteInterf(int i){ interfaces.RemoveAt(i);}
 	public void editInterf(int i, Medio medio, string ipAddress, int clockRate){ interfaces[i] = new Interf(medio, ipAddress, clockRate);}
@@ -56,6 +65,7 @@ class Interf
 	public Medio medio;
 	public string ipAddress;
 	public int clockRate;
+	public string name = "s0/0";
 	public Interf(){}
 	public Interf(Medio medio, string ipAddress, int clockRate)
 	{
@@ -65,6 +75,9 @@ class Interf
 	}
 	public void cadena(){
 		Debug.Log ("IP de la interfaz: "+ ipAddress);
+	}
+	public string config(){
+		return "interface " + name+ " \n" + "ip address " + ip address\n no shut"; 
 	}
 }
 
@@ -294,6 +307,7 @@ public class NewBehaviourScript : MonoBehaviour
 						//Console.WriteLine ("La interfaz, su nombre");
 						return null;
 					}
+					interfaz.name = utileria[1];
 					switch (utileria [1] [0]) {
 					case 'g':
 						interfaz.medio = Medio.Ethernet;
