@@ -77,7 +77,7 @@ class Interf
 		Debug.Log ("IP de la interfaz: "+ ipAddress);
 	}
 	public string config(){
-		return "interface " + name+ " \n" + "ip address " + ip address+ "\n no shut\n"; 
+		return "interface " + name+ " \n" + "ip address " + ipAddress+ "\n no shut\n"; 
 	}
 }
 
