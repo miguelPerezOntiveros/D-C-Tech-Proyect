@@ -1,10 +1,14 @@
-﻿//tu mamá
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.IO;
 
 enum Medio { Ethernet, Fibra, Wireless};
+
+//
+//
+//
+//
 
 class router
 {
@@ -31,6 +35,11 @@ class router
 
 
 }
+
+//
+//
+//
+//
 
 class Info
 {
@@ -60,6 +69,12 @@ class Info
 	public void deleteInterf(int i){ interfaces.RemoveAt(i);}
 	public void editInterf(int i, Medio medio, string ipAddress, int clockRate){ interfaces[i] = new Interf(medio, ipAddress, clockRate);}
 }
+
+//
+//
+//
+//
+
 class Interf
 {
 	public Medio medio;
@@ -80,6 +95,11 @@ class Interf
 		return "interface " + name+ " \n" + "ip address " + ipAddress+ "\n no shut\n"; 
 	}
 }
+
+//
+//
+//
+//
 
 class cable
 {
@@ -112,7 +132,10 @@ class cable
 
 //////////////////////////////////////////
 
-
+//
+//
+//
+//
 
 
 
@@ -382,10 +405,11 @@ public class NewBehaviourScript : MonoBehaviour
 
 	float [] scaleImg (Texture2D img, float width, float height)
 	{
+		//
+		//Regresa un vector con el tama;o de la imagen tal que esta mantenga su escala y no se vea pixeleada
+		//Se va a escalar al ancho indicado si este es mayor que el alto (y viceversa)
+		//
 		float [] size = new float[2];
-
-
-
 
 		if (width > height) {
 			float scale =(float)((float)(img.height) / (float)(img.width));
@@ -482,48 +506,84 @@ public class NewBehaviourScript : MonoBehaviour
 		//
 		//
 		//
-		float[] menuDerHeader = scaleImg (menuHeader, Screen.width*0.22f, 0);
 
+		//
+		//Inicia proceso para dibujar el header principal
+		//
 
+		//se obtiene la escala la imagen de fondo del header para que su ancho cubra un 22% del ancho de la pantalla
+		float[] menuDerHeader = scaleImg (menuHeader, Screen.width*0.22f, 0); 
 
-
+		//se dibuja la imagen de fondo del header pegada a la derecha y arriba de la pantalla
 		GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], 0, menuDerHeader[0], menuDerHeader[1]),menuHeader);
+		//etiqueta con el nombre del aparato (hostname)
 		GUI.Label (new Rect (Screen.width - (menuDerHeader [0] *.66f), (menuDerHeader [1] * 0.15f), menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), hostname, menuTitle);
+		//etiqueta con el modelo del aparato
 		GUI.Label (new Rect (Screen.width - (menuDerHeader [0] *.66f), (menuDerHeader [1] * 0.5f), menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Modelo R1800", menuSubTitle);
 
+		//se obtiene la escala para el boton de + que es usado para minimizar o maximizar el menu
 		float[] btnPlusHeader = scaleImg (plusHeader, Screen.width*0.02f, 0);
+
+		//se crea el boton
 		if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *1.5f, (menuDerHeader [1] * 0.3f  ), btnPlusHeader[0],btnPlusHeader[1]), "", btnPMHeader))
 		{
-			if (showMenu)
-			{
-				btnPMHeader = btnPlusH;
-				showMenu = false;
+			if (showMenu) //showMenu indica si el boton esta en -, es decir si el menu esta descomprimido
+			{ 
+				//si showMenu = true y se da click en el boton entonces se esta pidiendo que se comprima
+				btnPMHeader = btnPlusH; //se cambia la imagen del boton para que muestre un +
+				showMenu = false; //showMenu = falso, indicando que el menu esta comprimido
 			}
 			else
 			{
-				btnPMHeader = btnMinH ;
-				showMenu = true;
+				//si showMenu = false y se da click en el boton se esta pidiendo que se descomprima
+				btnPMHeader = btnMinH ; //se cambia la imagen del boton para que muestre un -
+				showMenu = true; //showMenu = true, indicando que el menu esta descomprimido
 			}
 		}
 
-		if (showMenu)
+		//
+		//Termina proceso de dibujae header principal
+		//
+
+		if (showMenu) //si el menu lateral esta descomprimido se dibuja el contenido del header y los submenus
 		{
+			//
+			//Inicia el proceso de dibujar el contenido del header principal
+			//
+
+			//se dibuja el fondo blanco partiendo de la posicion en Y del header
 			GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], menuDerHeader[1], menuDerHeader[0], menuDerHeader[1]*1.7f),backHeader);
 
+			//Etiqueta con el texto "hostname", solo usada para indicar que poner en el textfield siguiente
 			GUI.Label(new Rect ( Screen.width - menuDerHeader[0] * .75f, menuDerHeader[1]*1.1f, menuDerHeader[0], menuDerHeader[1]*.2f), "Hostname", menuText);
 
+			//Textfield que recibe el hostname, al momento de escribir en el se modifica el valor del string hostname y en consecuencia
+			//se cambia el hostname mostrado en el header principal *seccion anterior*
 			hostname = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .75f, menuDerHeader[1]*1.4f, menuDerHeader[0]*.66f, menuDerHeader[1]*.25f), hostname, textFieldStyle );
+
+			//Etiqueta Starup config
 			GUI.Label(new Rect ( Screen.width - menuDerHeader[0] * .75f, menuDerHeader[1]*1.8f, menuDerHeader[0], menuDerHeader[1]*.2f), "Startup config", menuText);
 
-
+			//se obtiene la escala para el boton de exportar script
 			float[] btnExportSize = scaleImg (btnExportI, 0, menuDerHeader[1]*0.25f);
+
+			//boton para exportar el script del startupconfig
 			if (GUI.Button(new Rect (Screen.width-btnExportSize[0], menuDerHeader[1]*1.8f, btnExportSize[0], btnExportSize[1]), "", btnExportStyle))
 			{
-				
+				//si se da click se exporta el script
+
+				//
+				//TO DO
+				//
 			}
+
+			//se obtiene la escala para el boton de cargar script
 			float[] btnLoadSize = scaleImg (btnLoadI, 0, menuDerHeader[1]*0.25f);
+
+			//boton para cargar el script del startupconfig
 			if (GUI.Button(new Rect (Screen.width - btnLoadSize[0] - btnExportSize[0], menuDerHeader[1]*1.8f, btnLoadSize[0], btnLoadSize[1] ), "", btnLoadStyle))
 			{
+				//si se da click se abre una ventana para seleccionar el script
 				using(StreamReader sr = new StreamReader(EditorUtility.OpenFilePanel("Load Configuration", "", "mike")))
 				{	
 					int edoLectura = -1;
@@ -557,274 +617,474 @@ public class NewBehaviourScript : MonoBehaviour
 						}
 					}
 					
-				}
-			}
+				}//termina using
+			}//termina boton para cargar el script del startupconfig
 
+			//etiqueta running config
 			GUI.Label(new Rect ( Screen.width - menuDerHeader[0] * .75f, menuDerHeader[1]*2.2f, menuDerHeader[0], menuDerHeader[1]*.2f), "Running config", menuText);
 
+			//boton para exportar script del runningconfig
 			if (GUI.Button(new Rect (Screen.width-btnExportSize[0], menuDerHeader[1]*2.15f, btnExportSize[0], btnExportSize[1]), "", btnExportStyle))
 			{
-				
-			}
+				//metodo exportar script del running config
+
+				//
+				//TO DO
+				//
+			}//termina boton para exportar script del runningconf
+
+			//boton para cargar script del runningconfig
 			if (GUI.Button(new Rect (Screen.width - btnLoadSize[0] - btnExportSize[0], menuDerHeader[1]*2.15f, btnLoadSize[0], btnLoadSize[1] ), "", btnLoadStyle))
 			{
+				//metodo cargar script del running config
 				
-			}
+				//
+				//TO DO
+				//
+			}//termina boton para cargar script del runningconfig
 
 			//
-			//Inicia seccion rutas
+			//Termina el proceso de dibujar el contenido del header principal
 			//
-			inicioMenuRutas = menuDerHeader[1]*2.7f;
 
+			//
+			//Inicia proceso para dibujar submenu de rutas
+			//
+
+			//Variable para almacenar inicio en Y del submenu de rutas (y evitar realizar este calculo en cada elemento GUI posterior)
+			inicioMenuRutas = menuDerHeader[1]*2.7f; //menuDerHeader[1] = posicion en Y del header, 2.7 = alto del fondo blanco del contenido del header
+
+			//se obtiene la escala para dibujar el fondo del header de un submenu
 			float[] otherHeaderSize = scaleImg (otherMenuHeader, menuDerHeader[0], 0);
 
-
+			//se dibuja el fondo del header del submenu
 			GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], inicioMenuRutas, otherHeaderSize[0], otherHeaderSize[1]),otherMenuHeader);
 
+			//se obtiene la escala para dubujar el icono de ruter que se dibuja en el header del submenu
 			float[] iconRutSize = scaleImg (iconMRut, menuDerHeader[0]*0.14f, 0);
+
+			//se dibuja el icono
 			GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0]*.66f - iconRutSize[0]*1.2f, inicioMenuRutas + (otherHeaderSize[1]- iconRutSize[1])*0.4f, iconRutSize[0], iconRutSize[1]),iconMRut);
 
+			//label indicando el titulo del submenu "Rutas"
 			GUI.Label (new Rect (Screen.width - (menuDerHeader [0] *.66f), inicioMenuRutas + iconRutSize[1]*0.4f, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Rutas" , menuTitle);
 
 
-
+			//boton de + para comprimir/descomprimir el contenido de la seccion rutas
 			if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *1.5f, inicioMenuRutas + iconRutSize[1]*0.4f, btnPlusHeader[0],btnPlusHeader[1]), "", btnPMRutas))
 			{
-				if (showRutas)
+				if (showRutas) //si showrutas = true la seccion estaba descomprimida
 				{
+					//se comprime la seccion y se cambia el icono del boton a un signo de + para indicar que puede ser descomprimida
 					btnPMRutas = btnPlusH ;
 					showRutas = false;
 
 				}
-				else
+				else //si showrutas=false la seccion estaba comprimida
 				{
+					//se descomprime la seccion y se cambia el icono del boton a un signo de - para indicar que puede ser comprimida
 					btnPMRutas = btnMinH;
 					showRutas = true;
+
+					//se revisa si se estaba mostrando la seccion de interfaces
+					//solo una seccion (interfaces o rutas) puede estar descomprimida a la vez
 					if (showInterfaces)
 					{
+						//si Interfaces estaba descomprimida y se descomprime Rutas entonces se comprime Interfaces
 						showInterfaces=false;
 						btnPMInterfaces = btnPlusH;
-
 					}
 				}
-			}
+			}// termina boton de + para comprimir/descomprimir el contenido de la seccion rutas
+
+			//se calcula la escala del subheader presente en el contenido de la seccion de rutas
 			float[] subHeaderSize = scaleImg (subMenuHeader, menuDerHeader[0], 0);
+
+			//se calcula la escala del boton para comprimir/descomprimir una seccion dentro del submenu de rutas
 			float[] plusSubSize = scaleImg (btnMinSub, btnPlusHeader[0]*0.5f, 0);
-			if (showRutas)
-			{
-				
 
+			if (showRutas) //si el menu de rutas esta descomprimido se muestra su contenido
+			{	
+				//
+				// Inicia dibujar header de rutas estaticas
+				//
 
+				//se dibuja el fondo de una de las subsecciones (rutas estaticas) del contenido
 				GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], inicioMenuRutas + otherHeaderSize[1], subHeaderSize[0], subHeaderSize[1]),subMenuHeader);
+				//se dibuja el label con el titulo de una de las subsecciones (rutas estaticas) del contenido
 				GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, (menuDerHeader [1] * 2.75f + otherHeaderSize[1]), menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Estaticas" , menuSubTitle);
 
-
+				//boton de + para comprimir/descomprimir el contenido de la seccion de rutas estaticas
 				if (GUI.Button(new Rect(Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0],(menuDerHeader [1] * 2.75f + otherHeaderSize[1]),plusSubSize[0], plusSubSize[1]),"", btnPMRutasE))
 				{
-					if (showRutasE)
+					if (showRutasE) //si rutas estaticas estaba descomprimido
 					{
+						//se comprime y se cambia el boton a un + para indicar que se puede descomprimir
 						btnPMRutasE = btnPlusS;
 						showRutasE = false;
 					}
-					else
+					else // si rutas estaticas estaba comprimido
 					{
+						//se descomprime y se cambia el boton a un - para indicar que se puede comprimir
 						btnPMRutasE = btnMinS ;
 						showRutasE = true;
 					}
-				}
+				}//termina boton de + para comprimir/descomprimir el contenido de la seccion de rutas estaticas
+
+
+				//
+				// Termina dibujar header de rutas estaticas
+				//
+
+
+				//se almacena el fin de la seccion de contenido de rutas estaticas para evitar calcularlo despues
 				float yAddRutasE = (menuDerHeader[1]*2.5f);
-				if (showRutasE)
+
+				if (showRutasE) //si la subseccion de rutas estaticas esta descomprimida se muestra su contenido
 				{
+					//
+					// Inicia dibujar contenido de rutas estaticas
+					//
+
+					//se almacena el inicio del contenido de rutas estaticas para evitar calcularlo posteriormente
 					float yRutasInit = inicioMenuRutas + otherHeaderSize[1]+subHeaderSize[1];
+
+					//se dibuja el fondo de la seccion
 					GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], yRutasInit , menuDerHeader[0], menuDerHeader[1]*2.5f),backHeader);
-					
+
+					//
+					// Inicia el dibujo se las rutas existentes
+					//
+
+					//
+					//se dibuja la ruta 1 
+					//
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f,yRutasInit, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "10.0.0.0 [1/0] via 10.0.0.1" , menuSimpleText);
+
+					//calculo de la escala de los botones eliminar y modificar
 					float[] delBtnSize = scaleImg (btnDelI, plusSubSize[0], 0);
+
+					//boton eliminar ruta1
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0], yRutasInit, delBtnSize [0] , delBtnSize [1]),"", btnDel))
 					{
 
-					}
+					}//fin boton eliminar ruta1
+
+					//boton modificar ruta1
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0] - delBtnSize[0]*1.2f, yRutasInit, delBtnSize [0] , delBtnSize [1]),"", btnEdit))
 					{
 						
-					}
+					}//fin boton modificar ruta1
 
+					//
+					//Fin ruta 1 
+					//
+
+					//
+					//se dibuja la ruta 2 
+					//
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, yRutasInit + menuDerHeader [1]*0.25f , menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "10.0.0.0 [1/0] via 10.0.0.1" , menuSimpleText);
+
+					//boton eliminar ruta2
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0], yRutasInit+menuDerHeader [1]*0.25f , delBtnSize [0] , delBtnSize [1]),"", btnDel))
 					{
 						
-					}
+					}//fin boton eliminar ruta2
+
+					//boton modificar ruta2
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0] - delBtnSize[0]*1.2f, yRutasInit+menuDerHeader [1]*0.25f , delBtnSize [0] , delBtnSize [1]),"", btnEdit))
 					{
 						
-					}
+					}//fin boton modificar ruta2
 
+					//
+					//Fin ruta 2 
+					//
+
+					//
+					// Termina el dibujo de las rutas existentes
+					//
+
+					//
+					// Inicia el dibujo del formulario para agregar rutas
+					//
+
+					//se almacena el inicio en Y de la seccion del formulario para evitar calcularlo posteriormente
 					float agregarRutasInit = yRutasInit + menuDerHeader [1]*0.25f + delBtnSize [1]*2f;
+
+					//etiqueta "Agregar Rutas"
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, agregarRutasInit, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "+ Agregar rutas" , menuText);
 
+					//Etiqueta "red"
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, agregarRutasInit + delBtnSize[1]*2 , menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Red" , menuSimpleText);
+					//textfield que recibe la red escrita por el usuario y la almacena en la variable red
 					red = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, agregarRutasInit + delBtnSize[1]*2, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), red, textFieldStyle );
 
+					//Etiqueta "mascara"
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, agregarRutasInit+ delBtnSize[1]*4 , menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Mascara" , menuSimpleText);
+					//textfield que recibe la mascara escrita por el usuario y la almacena en la variable mascara
 					mascara = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, agregarRutasInit + delBtnSize[1]*4, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), mascara, textFieldStyle );
 
+					//Etiqueta "sig salto"
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, agregarRutasInit+ delBtnSize[1]*6, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Sig. salto" , menuSimpleText);
+					//textfield que recibe el sig salto escrito por el usuario y lo almacena en la variable salto
 					salto = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, agregarRutasInit + delBtnSize[1]*6, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), salto, textFieldStyle );
 
+					//se obtiene la escala del boton agregar ruta
 					float[] agrBtnSize = scaleImg (btnAgregarI, 0, menuDerHeader[1]*0.25f);
+
+					//boton agregar ruta
 					if (GUI.Button (new Rect(Screen.width - agrBtnSize[0], agregarRutasInit+ delBtnSize[1]*9,agrBtnSize[0], agrBtnSize[1]), "", btnAgregar))
 					{
 
-					}
+					}//fin boton agregar ruta
 
+					//
+					// Termina el dibujo del formulario para agregar rutas
+					//
 
+					//
+					// Termina dibujar contenido de rutas estaticas
+					//
 				}
-				else
-					yAddRutasE=0;
+				else //si la seccion de rutas estaticas esta comprimida
+					yAddRutasE=0; //el fin de la seccion de contenido es 0 dado que no esta visible
 
+				//
+				// Inicia dibujar header de rutas dinamicas
+				//
 
+				//se dibuja el fondo del header, su posicion en y depende de la variable yAddRutasE, que cambia si la seccion previa (rutas estaticas) 
+				//es visible o no
 				GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], inicioMenuRutas + otherHeaderSize[1]+subHeaderSize[1] + 
 				                          yAddRutasE, subHeaderSize[0], subHeaderSize[1]),subMenuHeader);
+				//se dibuja el titulo de la seccion "Rutas dinamicas"
 				GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, (menuDerHeader [1] * 2.75f + otherHeaderSize[1]+subHeaderSize[1] 
 				                                                              + yAddRutasE), menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Dinamicas" , menuSubTitle);
-				
+				//se almacena la posicion en y del header de rutas dinamicas, esto se usa despues para saber donde dibujar el header de 
+				//la seccion de interfaces dependiendo de si esta o no visible esta subseccion
 				inicioMenuInterfacesSinD = (menuDerHeader [1] * 2.75f + otherHeaderSize[1]+subHeaderSize[1] + yAddRutasE + menuDerHeader [1]*0.25f);
 
-				if (GUI.Button(new Rect(Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0],(menuDerHeader [1] * 2.75f + otherHeaderSize[1]+
-				                                                                                subHeaderSize[1] + yAddRutasE),plusSubSize[0], plusSubSize[1]),"", btnPMRutasD))
-				{
-					
-
-					if (showRutasD)
+				//boton + para comprimir/descomprimir la seccion de rutas dinamicas 
+				if (GUI.Button(new Rect(Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0],(menuDerHeader [1] * 2.75f + otherHeaderSize[1]+ 				                                                                                subHeaderSize[1] + yAddRutasE),plusSubSize[0], plusSubSize[1]),"", btnPMRutasD))
+				{	
+					if (showRutasD) //si la seccion de rutas dinamicas estaba descomprimida
 					{
+						//se comprime y el boton cambia a +
 						btnPMRutasD = btnPlusS;
 						showRutasD = false;
 					}
-					else
+					else //si la seccion de rutas dinamicas estaba comprimida
 					{
+						//se descomprime y el boton cambia a -
 						btnPMRutasD = btnMinS ;
 						showRutasD = true;
 					}
+				}//boton + para comprimir/descomprimir la seccion de rutas dinamicas 
 
+				//
+				// Fin dibujar header de rutas dinamicas
+				//
 
-				}
-
+				//si la seccion de rutas dinamicas esta decomprimida se muestra su contenido
 				if (showRutasD)
 				{
+					//
+					//Inicia dibujar contenido de rutas dinamicas
+					//
+
+					//se guarda la posicion de inicio en Y de la seccion de contenido para evitar calcularlo despues
 					float yRutasInit = inicioMenuRutas+ otherHeaderSize[1]+subHeaderSize[1] + subHeaderSize[1] +yAddRutasE;
 
-
+					//se guarda la posicion de fin en y de la seccion de contenido para usarlo como inicio para el header de la seccion de interfaces
 					inicioMenuInterfacesConD = yRutasInit + menuDerHeader[1]*2.2f;
+					//se dibuja el fondo del header de la seccion
 					GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], yRutasInit , menuDerHeader[0], menuDerHeader[1]*2.2f),backHeader);
-					
+
+					// 
+					//Incio del dibujado de las rutas existentes
+					//
+
+					//
+					//ruta 1
+					//
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f,yRutasInit, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "10.0.0.0 [1/0] via 10.0.0.1" , menuSimpleText);
+
+					//calculo del tama;o del btono borrar
 					float[] delBtnSize = scaleImg (btnDelI, plusSubSize[0], 0);
+
+					//boton borrar
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0], yRutasInit, delBtnSize [0] , delBtnSize [1]),"", btnDel))
 					{
 						
-					}
+					}//fin boton borrar
+
+					//boton modificar ruta
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0] - delBtnSize[0]*1.2f, yRutasInit, delBtnSize [0] , delBtnSize [1]),"", btnEdit))
 					{
 						
-					}
-					
+					}//fin boton modificar ruta
+
+					//
+					//fin ruta 1
+					//
+
+					//
+					//ruta 2
+					//
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, yRutasInit + menuDerHeader [1]*0.25f , menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "10.0.0.0 [1/0] via 10.0.0.1" , menuSimpleText);
+
+					//boton borrar
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0], yRutasInit+menuDerHeader [1]*0.25f , delBtnSize [0] , delBtnSize [1]),"", btnDel))
 					{
 						
-					}
+					}//fin boton borrar
+
+					//boton modificar
 					if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0] - delBtnSize[0]*1.2f, yRutasInit+menuDerHeader [1]*0.25f , delBtnSize [0] , delBtnSize [1]),"", btnEdit))
 					{
 						
-					}
-					
+					}//fin boton modificar
+
+					// 
+					//Fin del dibujado de las rutas existentes
+					//
+
+					// 
+					//Incio del dibujado de formulario para agregar rutas
+					//
+
+					//se almacena la posicion de inicio en Y para iniciar la seccion
 					float agregarRutasInit = yRutasInit + menuDerHeader [1]*0.25f + delBtnSize [1]*2f;
+
+					//etiqueta con el titulo de la seccion
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, agregarRutasInit, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "+ Agregar rutas" , menuText);
-					
+
+					//etiqueta protocolo
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, agregarRutasInit + delBtnSize[1]*2 , menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Protocolo" , menuSimpleText);
+					//campo de texto que recibe la entrada del usuario y lo almacena en la variable protocolo
 					protocolo = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, agregarRutasInit + delBtnSize[1]*2, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), protocolo, textFieldStyle );
 
+					//etiqueta red
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, agregarRutasInit+ delBtnSize[1]*4 , menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Red" , menuSimpleText);
+					//campo de texto que recibe la entrada del usuario y lo almacena en la variable red2
 					red2 = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, agregarRutasInit + delBtnSize[1]*4, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), red2, textFieldStyle );
 
-					
+					//se obtiene escala del boton de agregar rutas
 					float[] agrBtnSize = scaleImg (btnAgregarI, 0, menuDerHeader[1]*0.25f);
+
+					//boton agregar rutas
 					if (GUI.Button (new Rect(Screen.width - agrBtnSize[0], agregarRutasInit+ delBtnSize[1]*7,agrBtnSize[0], agrBtnSize[1]), "", btnAgregar))
 					{
 						
-					}
-					
+					}//fin boton agregar rutas
+
+					//como se entro al metodo la seccion de rutas dinamicas esta descomprimida, entonces se modifica la posicion en y de 
+					//inicio para el header de la seccion de interfaces de manera que inicie al final del contenido de la seccion de rutas dinamicas
 					inicioMenuInterfaces = inicioMenuInterfacesConD;
 
 				}
-				else
-				{
-					inicioMenuInterfaces = inicioMenuInterfacesSinD;
-					
-				}
-			}
-			else
-				inicioMenuInterfaces = inicioMenuRutas+ otherHeaderSize[1];
-
+				else //si la seccion de rutas dinamicas esta comprimida
+					inicioMenuInterfaces = inicioMenuInterfacesSinD; //el inicio del menu interfaces es justo despues del final del header de rutas dinamicas			
+			} 
+			else //si la seccion de rutas esta comprimida
+				inicioMenuInterfaces = inicioMenuRutas+ otherHeaderSize[1]; //el inicio del menu interfaces es justo despues del final del header de rutas
+			//
 			//
 			//termina seccion rutas
 			//
-
+			//
+			/*************************************************************************************************************/
+			//
 			//
 			//Inicia seccion interfaces
 			//
+			//
 
+			//
+			//Inicio header interfaces
+			//
+
+			//se dibuja el fondo del header de la seccion
 			GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], inicioMenuInterfaces, otherHeaderSize[0], otherHeaderSize[1]),otherMenuHeader);
 
-			GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], inicioMenuInterfaces, otherHeaderSize[0], otherHeaderSize[1]),otherMenuHeader);
-			
+			//se obtiene la escala del icono de interfaces
 			float[] iconIntSize = scaleImg (iconMInt, menuDerHeader[0]*0.14f, 0);
+
+			//se dibuja el icono de interfaces
 			GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0]*.66f - iconIntSize[0]*1.2f, 
 			                          inicioMenuInterfaces + (otherHeaderSize[1]- iconIntSize[1])*0.4f, iconIntSize[0], iconIntSize[1]),iconMInt);
-			
+
+			//etiqueta con el titulo de la seccion
 			GUI.Label (new Rect (Screen.width - (menuDerHeader [0] *.66f), inicioMenuInterfaces + iconIntSize[1]*0.4f, menuDerHeader [0] *0.3f, 
 			                     menuDerHeader [1]*0.25f), "Interfaces" , menuTitle);
 			
 			
-			
+			//boton de + para comprimir/descomprimir la seccion
 			if (GUI.Button(new Rect (Screen.width - btnPlusHeader[0] *1.5f, inicioMenuInterfaces + iconIntSize[1]*0.4f, btnPlusHeader[0],btnPlusHeader[1]), "", btnPMInterfaces))
 			{
-				if (showInterfaces)
+				if (showInterfaces) //si la seccion esta descomprimida
 				{
+					//se comprime y el boton de cambia a +
 					btnPMInterfaces = btnPlusH ;
-					showInterfaces = false;
-					
+					showInterfaces = false;					
 				}
-				else
+				else //si la seccion esta comprimida
 				{
+					//se descomprime y el boton se cambia a -
 					btnPMInterfaces= btnMinH;
 					showInterfaces = true;
-					if (showRutas)
+
+					//como solo se puede tener una seccion (rutas o interfaces) descomprimida a la vez se revisa si la seccion de rutas estaba descomprimida
+					if (showRutas) //si estaba descromprimida
 					{
+						//se comprime y su boton cambia a +
 						showRutas=false;
 						btnPMRutas = btnPlusH;
 					}
 				}
-			}
+			}//boton de + para comprimir/descomprimir la seccion
 
-			if(showInterfaces)
+			//
+			//Fin header interfaces
+			//
+
+			if(showInterfaces) //si la seccion esta descomprimida se muestra su contenido
 			{
-				//inicia fa
+				//
+				//Inicio contenido interfaces
+				//
+
+
+				//
+				//Inicio header interfaz Fa
+				//
+
+				//se almacena la posicion del header de la interfaz Fa
 				float initHeadFa = inicioMenuInterfaces + otherHeaderSize[1];
+
+				//se dibuja el fondo del header de la interfaz
 				GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], initHeadFa, subHeaderSize[0], subHeaderSize[1]),subMenuHeader);
+				//etiqueta con del nombre de la interfaz
 				GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, (initHeadFa+ subHeaderSize[1]*0.25f), menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "fa0/0" , menuSubTitle);
 
+				//boton + para comprimir/descomprimir seccion
 				if (GUI.Button(new Rect(Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0],(initHeadFa+ subHeaderSize[1]*0.25f),plusSubSize[0], plusSubSize[1]),"", btnPMIntFa))
 				{
-					if (showIntFa)
+					if (showIntFa) //si la seccion esta descomprimida
 					{
+						//se comprime y el boton cambia a -
 						btnPMIntFa = btnPlusS;
 						showIntFa = false;
 					}
-					else
+					else //si la seccion estaba comprimida
 					{
+						//se descomprime y el boton cambia a +
 						btnPMIntFa = btnMinS ;
 						showIntFa = true;
+
+						//como solo se puede tener una interfaz descomprimida 
+						//se revisa si alguna de las otras esta descomprimida, de estarlo se comprime
 						if (showIntSe)
 						{
 							btnPMIntSe = btnPlusS;
@@ -836,52 +1096,84 @@ public class NewBehaviourScript : MonoBehaviour
 							showIntAgr = false;
 						}
 					}
-				}
+				}//fin boton + para comprimir/descomprimir seccion
 
+				//
+				//Fin header interfaz Fa
+				//
+
+				//se almacena el inicio de la seccion de contenido de Fa para evitar calcularlo posteriormente
 				float initIntFa = initHeadFa+ subHeaderSize[1];
+				//se obtiene la escala del boton de modificar
 				float[] modBtnSize = scaleImg (btnModificarI, 0, menuDerHeader[1]*0.25f);
-				float endFa = initIntFa;
-				if (showIntFa)
+				float endFa = initIntFa; //se almacena el fin de la seccion de Fa como el fin del header
+
+				if (showIntFa) //si la seccion de Fa esta descomprimida se dibuja su contenido
 				{
+					//dibujo del fondo
 					GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], initIntFa , menuDerHeader[0], menuDerHeader[1]*1.7f),backHeader);
-					
+
+					//Etiqueta "Mac"
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, initIntFa + subHeaderSize[1] *0.5f, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "MAC" , menuSimpleText);
+					//campo de texto que recibe la entrada de usuario y la almacena en el string mac
 					mac = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, initIntFa + subHeaderSize[1]*0.5f, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), mac, textFieldStyle );
-					
+
+					//etiqueta ip
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, initIntFa + subHeaderSize[1] *0.5f + menuDerHeader [1]*0.3f, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "IP" , menuSimpleText);
+					//campo de texto que recibe la entrada de usuario y la almacena en el string ip
 					ip = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, initIntFa + subHeaderSize[1]*0.5f +menuDerHeader [1]*0.3f, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), ip, textFieldStyle );
-					
+
+					//etiqueta mascara
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, initIntFa + subHeaderSize[1] *0.5f + menuDerHeader [1]*0.3f * 2, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Mascara" , menuSimpleText);
+					//campo de texto que recibe la entrada de usuario y la almacena en el string mascara2
 					mascara2 = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, initIntFa + subHeaderSize[1]*0.5f +menuDerHeader [1]*0.3f * 2, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), mascara2, textFieldStyle );
 					
 					
-
+					//boton modificar interfaz
 					if (GUI.Button (new Rect(Screen.width - modBtnSize[0], initIntFa + subHeaderSize[1] *0.5f + menuDerHeader [1]*0.3f * 3.5f,modBtnSize[0], modBtnSize[1]), "", btnModificar))
 					{
 						
-					}
-					endFa = initIntFa + menuDerHeader[1]*1.7f;
+					}//boton modificar interfaz
+					endFa = initIntFa + menuDerHeader[1]*1.7f;//se almacena el fin de la seccion de Fa como el fin de la seccion de contenido
 				}
 
-				//termina fa
+				//
+				//termina interfaz fa
+				//
 
-				//inicio se
+				//
+				//inicio interfaz se
+				//
+
+
+				//
+				// Inicio header de la seccion
+				//
+
+				//se almacena el iicio de la interfaz como el fin de la interfaz anterior
 				float initHeadSe = endFa;
+
+				//se dibuja el fondo del header
 				GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], initHeadSe, subHeaderSize[0], subHeaderSize[1]),subMenuHeader);
+				//etiqueta del header
 				GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, (initHeadSe+ subHeaderSize[1]*0.25f), menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "se0/0" , menuSubTitle);
-				
+
+				//boton de + para comprimir/descomprimir el contenido de la interfaz
 				if (GUI.Button(new Rect(Screen.width - btnPlusHeader[0] *.5f  - plusSubSize[0],(initHeadSe+ subHeaderSize[1]*0.25f),plusSubSize[0], plusSubSize[1]),"", btnPMIntSe))
 				{
-					if (showIntSe)
+					if (showIntSe) //si la interfaz estaba descomprimida
 					{
+						//se comprime y el boton cambia a -
 						btnPMIntSe = btnPlusS;
 						showIntSe = false;
 					}
 					else
 					{
+						//se descomprime y el boton cambia a +
 						btnPMIntSe = btnMinS ;
 						showIntSe = true;
 
+						//se revisa que ninguna de las otras secciones este descomprimida y si alguna lo esta se comprime
 						if (showIntFa)
 						{
 							btnPMIntFa = btnPlusS;
@@ -893,32 +1185,37 @@ public class NewBehaviourScript : MonoBehaviour
 							showIntAgr = false;
 						}
 					}
-				}
-				
-				float initIntSe = initHeadSe+ subHeaderSize[1];
+				}//fin boton de + para comprimir/descomprimir el contenido de la interfaz
 
+				//se guarda el inicio en Y del contenido de la seccion
+				float initIntSe = initHeadSe+ subHeaderSize[1];
+				//se guarda el fin de la seccion como el inicio del contenido de la seccion *se asume que esta comprimida*
 				float endSe = initIntSe;
 
-				if (showIntSe)
+				if (showIntSe) //si la seccion esta descomprimida
 				{
+					//dibujo del fondo
 					GUI.DrawTexture(new Rect (Screen.width - menuDerHeader[0], initIntSe , menuDerHeader[0], menuDerHeader[1]*1.7f),backHeader);
-					
+
+					//clockrate: etiqueta y textbox
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, initIntSe + subHeaderSize[1] *0.5f, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Clockrate" , menuSimpleText);
 					clockrate = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, initIntSe + subHeaderSize[1]*0.5f, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), clockrate, textFieldStyle );
 					
+					//ip: etiqueta y textbox
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, initIntSe + subHeaderSize[1] *0.5f + menuDerHeader [1]*0.3f, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "IP" , menuSimpleText);
 					ip = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, initIntSe + subHeaderSize[1]*0.5f +menuDerHeader [1]*0.3f, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), ip, textFieldStyle );
-					
+
+					//mascara2: etiqueta y textbox
 					GUI.Label (new Rect (Screen.width - menuDerHeader[0] * .75f, initIntSe + subHeaderSize[1] *0.5f + menuDerHeader [1]*0.3f * 2, menuDerHeader [0] *0.3f, menuDerHeader [1]*0.25f), "Mascara" , menuSimpleText);
 					mascara2 = GUI.TextField(new Rect ( Screen.width - menuDerHeader[0] * .5175f, initIntSe + subHeaderSize[1]*0.5f +menuDerHeader [1]*0.3f * 2, menuDerHeader[0]*.45f, menuDerHeader[1]*.25f), mascara2, textFieldStyle );
 					
-					
-					
+					//boton modificar interfaz					
 					if (GUI.Button (new Rect(Screen.width - modBtnSize[0], initIntSe + subHeaderSize[1] *0.5f + menuDerHeader [1]*0.3f * 3.5f,modBtnSize[0], modBtnSize[1]), "", btnModificar))
 					{
 						
-					}
+					}//fin boton modificar interfaz	
 
+					//si se entro al metodo entonces el contenido se esta mostrando por lo cual el fin en y de la seccion cmabia al fin del contenido
 					endSe = initIntSe + menuDerHeader[1]*1.7f;
 				}
 				//termina se

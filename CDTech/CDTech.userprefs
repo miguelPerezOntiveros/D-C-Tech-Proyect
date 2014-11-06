@@ -1,10 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\OSPF.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\NewBehaviourScript.cs">
     <Files>
-      <File FileName="Assets\OSPF.cs" Line="3" Column="17" />
-      <File FileName="Assets\NewBehaviourScript.cs" Line="768" Column="90" />
-      <File FileName="..\..\..\..\Unity\Aniversario\Network\Assets\RedC.cs" Line="3" Column="1" />
+      <File FileName="Assets\NewBehaviourScript.cs" Line="1219" Column="48" />
+      <File FileName="Assets\NewBehaviourScript.cs" Line="1479" Column="1" />
+      <File FileName="Assets\OSPF.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

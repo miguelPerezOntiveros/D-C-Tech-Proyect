@@ -8,3 +8,33 @@ network 10.4.0.1 area 0.0.0.0
 network 10.10.2.1 area 0.0.0.6
 end
 #otra seccion
+enable
+#Routing protocol
+configure terminal
+router ospf
+router-id 123.456.789.000
+network 123.456.789.000 area 123.456.789.000
+network 10.4.0.1 area 0.0.0.0
+network 10.10.2.1 area 0.0.0.6
+end
+#otra seccion
+enable
+#Routing protocol
+configure terminal
+router ospf
+router-id 123.456.789.000
+network 123.456.789.000 area 123.456.789.000
+network 10.4.0.1 area 0.0.0.0
+network 10.10.2.1 area 0.0.0.6
+end
+#otra seccion
+enable
+#Routing protocol
+configure terminal
+router ospf
+router-id 123.456.789.000
+network 123.456.789.000 area 123.456.789.000
+network 10.4.0.1 area 0.0.0.0
+network 10.10.2.1 area 0.0.0.6
+end
+#otra seccion
