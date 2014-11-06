@@ -49,7 +49,7 @@ class Info
 	}
 	public string config(){
 		string salida = "hostname " + hostname;
-		for (int i = 0; i< interfaces.count; i++){
+		for (int i = 0; i< interfaces.Count; i++){
 			Interf a = (Interf)interfaces[i];
 			salida += a.config();
 		}
